@@ -1,5 +1,6 @@
 package com.example.justlifetest.factory;
 
+import com.example.justlifetest.constants.BusinessConstants;
 import com.example.justlifetest.dto.AvailabilityDto;
 import com.example.justlifetest.dto.AvailableVehicleDto;
 import com.example.justlifetest.dto.CleanerDto;
@@ -22,9 +23,9 @@ public class ObjectFactory {
     public static Booking createBooking(TimeSlotDto timeSlotDto, List<Cleaner> cleaners) {
         Booking booking = new Booking();
         booking.setStartDate(DateTimeUtil.stringToTimestamp(
-                timeSlotDto.getDate() + " " + timeSlotDto.getStartTime()));
+                timeSlotDto.getDate().concat(" ").concat(timeSlotDto.getStartTime()).concat(BusinessConstants.SECONDS_FOR_DATE)));
         booking.setEndDate(DateTimeUtil.stringToTimestamp(
-                timeSlotDto.getDate() + " " + timeSlotDto.getEndTime()));
+                timeSlotDto.getDate().concat(" ").concat(timeSlotDto.getEndTime()).concat(BusinessConstants.SECONDS_FOR_DATE)));
         booking.setCleaners(Set.copyOf(cleaners));
         booking.setId(Math.abs(UUID.randomUUID().getMostSignificantBits()));
         booking.setCreateTime(DateTimeUtil.getCurrentTimestamp());
