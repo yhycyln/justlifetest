@@ -9,12 +9,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class RequestDtoTest {
+class RequestDtoTest {
 
     @Test
     void testBookingUpdateRequestDto() {
         TimeSlotDto timeSlotDto = new TimeSlotDto("2023-10-01", "09:00", "11:00");
-        CleanerDto cleanerDto = new CleanerDto("John", "John Doe", 101L);
+        CleanerDto cleanerDto = new CleanerDto(1L, "John", "Doe", 101L);
         List<CleanerDto> cleanerList = List.of(cleanerDto);
 
         BookingUpdateRequestDto dto = new BookingUpdateRequestDto(1L, timeSlotDto, cleanerList);
@@ -28,7 +28,7 @@ public class RequestDtoTest {
     @Test
     void testBookingUpdateRequestDtoBuilder() {
         TimeSlotDto timeSlotDto = new TimeSlotDto("2023-10-01", "09:00", "11:00");
-                CleanerDto cleanerDto = new CleanerDto("John", "John Doe", 101L);
+        CleanerDto cleanerDto = new CleanerDto(1L, "John", "Doe", 101L);
         List<CleanerDto> cleanerList = List.of(cleanerDto);
 
         BookingUpdateRequestDto dto = BookingUpdateRequestDto.builder()

@@ -23,7 +23,6 @@ import java.util.List;
 
 
 @Service
-@Transactional
 public class BookingCommandServiceImpl implements BookingCommandService {
 
     private final BookingRepository bookingRepository;
@@ -55,6 +54,7 @@ public class BookingCommandServiceImpl implements BookingCommandService {
      * @return BookingDto
      */
     @Override
+    @Transactional
     public BookingDto createBooking(BookingRequestDto requestDto) {
         TimeSlotDto timeSlotDto = requestDto.getTimeSlotDto();
         validationHelper.validateCleanerCountAndTimeSlot(requestDto.getCleanerCount(), timeSlotDto);
@@ -95,6 +95,8 @@ public class BookingCommandServiceImpl implements BookingCommandService {
      * @param requestDto - BookingUpdateRequestDto
      * @return BookingDto
      */
+    @Override
+    @Transactional
     public BookingDto updateBooking(BookingUpdateRequestDto requestDto) {
         TimeSlotDto timeSlotDto = requestDto.getTimeSlotDto();
         validationHelper.validateCleanerCountAndTimeSlot(requestDto.getCleanerList().size(), timeSlotDto);

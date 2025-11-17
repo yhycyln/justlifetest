@@ -6,6 +6,7 @@ import com.example.justlifetest.dto.CleanerDto;
 import com.example.justlifetest.dto.TimeSlotDto;
 import com.example.justlifetest.model.Booking;
 import com.example.justlifetest.model.Cleaner;
+import com.example.justlifetest.model.Vehicle;
 import com.example.justlifetest.util.DateTimeUtil;
 import org.junit.jupiter.api.Test;
 
@@ -15,14 +16,18 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
 
 class ObjectFactoryTest {
 
     @Test
     void testCreateBooking() {
-        TimeSlotDto timeSlotDto = new TimeSlotDto("2023-10-01", "09:00", "11:00");
-        Cleaner cleaner = mock(Cleaner.class);
+        TimeSlotDto timeSlotDto = TimeSlotDto.builder()
+                .date("2023-10-01")
+                .startTime("09:00")
+                .endTime("11:00")
+                .build();
+        Cleaner cleaner = new Cleaner();
+        cleaner.setId(1L);
         List<Cleaner> cleaners = List.of(cleaner);
 
         Booking booking = ObjectFactory.createBooking(timeSlotDto, cleaners);
@@ -47,7 +52,10 @@ class ObjectFactoryTest {
 
     @Test
     void testCreateAvailabilityDto() {
-        AvailableVehicleDto availableVehicleDto = mock(AvailableVehicleDto.class);
+        AvailableVehicleDto availableVehicleDto = AvailableVehicleDto.builder()
+                .vehicleId(101L)
+                .cleanerWithTimeSlots(Map.of())
+                .build();
         List<AvailableVehicleDto> availableVehicleDtoList = List.of(availableVehicleDto);
 
         AvailabilityDto availabilityDto = ObjectFactory.createAvailabilityDto(availableVehicleDtoList);
@@ -58,8 +66,17 @@ class ObjectFactoryTest {
 
     @Test
     void testCreateAvailableVehicleDto() {
-        CleanerDto cleanerDto = new CleanerDto("John", "Doe", 101L);
-        TimeSlotDto timeSlotDto = new TimeSlotDto("2023-10-01", "09:00", "11:00");
+        CleanerDto cleanerDto = CleanerDto.builder()
+                .id(1L)
+                .name("John")
+                .surname("Doe")
+                .vehicleId(101L)
+                .build();
+        TimeSlotDto timeSlotDto = TimeSlotDto.builder()
+                .date("2023-10-01")
+                .startTime("09:00")
+                .endTime("11:00")
+                .build();
         Map<CleanerDto, List<TimeSlotDto>> cleanerWithTimeSlots = Map.of(cleanerDto, List.of(timeSlotDto));
 
         AvailableVehicleDto availableVehicleDto = ObjectFactory.createAvailableVehicleDto(101L, cleanerWithTimeSlots);
@@ -67,5 +84,25 @@ class ObjectFactoryTest {
         assertNotNull(availableVehicleDto);
         assertEquals(101L, availableVehicleDto.getVehicleId());
         assertEquals(cleanerWithTimeSlots, availableVehicleDto.getCleanerWithTimeSlots());
+    }
+
+    @Test
+    void testCreateVehicle() {
+        Vehicle vehicle = ObjectFactory.createVehicle(101L);
+
+        assertNotNull(vehicle);
+        assertEquals(101L, vehicle.getId());
+        assertEquals("Vehicle-101", vehicle.getName());
+    }
+
+    @Test
+    void testCreateCleaner() {
+        Vehicle vehicle = ObjectFactory.createVehicle(101L);
+        Cleaner cleaner = ObjectFactory.createCleaner(1L, vehicle);
+
+        assertNotNull(cleaner);
+        assertEquals(1L, cleaner.getId());
+        assertEquals("Cleaner-1", cleaner.getName());
+        assertEquals(vehicle, cleaner.getVehicle());
     }
 }

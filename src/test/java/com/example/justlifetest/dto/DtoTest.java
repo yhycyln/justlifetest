@@ -12,9 +12,10 @@ class DtoTest {
 
     @Test
     void testCleanerDto() {
-        CleanerDto cleanerDto = new CleanerDto("John", "Doe", 101L);
+        CleanerDto cleanerDto = new CleanerDto(1L, "John", "Doe", 101L);
 
         assertNotNull(cleanerDto);
+        assertEquals(1L, cleanerDto.getId());
         assertEquals("John", cleanerDto.getName());
         assertEquals("Doe", cleanerDto.getSurname());
         assertEquals(101L, cleanerDto.getVehicleId());
@@ -32,7 +33,7 @@ class DtoTest {
 
     @Test
     void testAvailableVehicleDto() {
-        CleanerDto cleanerDto = new CleanerDto("John", "Doe", 101L);
+        CleanerDto cleanerDto = new CleanerDto(1L, "John", "Doe", 101L);
         TimeSlotDto timeSlotDto = new TimeSlotDto("2023-10-01", "09:00", "11:00");
         Map<CleanerDto, List<TimeSlotDto>> cleanerWithTimeSlots = Map.of(cleanerDto, List.of(timeSlotDto));
 
@@ -45,20 +46,21 @@ class DtoTest {
 
     @Test
     void testBookingDto() {
-        CleanerDto cleanerDto = new CleanerDto("John", "Doe", 101L);
+        CleanerDto cleanerDto = new CleanerDto(1L, "John", "Doe", 101L);
         TimeSlotDto timeSlotDto = new TimeSlotDto("2023-10-01", "09:00", "11:00");
         List<CleanerDto> cleanerDtoList = List.of(cleanerDto);
 
-        BookingDto bookingDto = new BookingDto(cleanerDtoList, timeSlotDto);
+        BookingDto bookingDto = new BookingDto(1L, cleanerDtoList, timeSlotDto);
 
         assertNotNull(bookingDto);
+        assertEquals(1L, bookingDto.getId());
         assertEquals(cleanerDtoList, bookingDto.getCleanerDtoList());
         assertEquals(timeSlotDto, bookingDto.getTimeSlotDto());
     }
 
     @Test
     void testAvailabilityDto() {
-        CleanerDto cleanerDto = new CleanerDto("John", "Doe", 101L);
+        CleanerDto cleanerDto = new CleanerDto(1L, "John", "Doe", 101L);
         TimeSlotDto timeSlotDto = new TimeSlotDto("2023-10-01", "09:00", "11:00");
         Map<CleanerDto, List<TimeSlotDto>> cleanerWithTimeSlots = Map.of(cleanerDto, List.of(timeSlotDto));
         AvailableVehicleDto availableVehicleDto = new AvailableVehicleDto(101L, cleanerWithTimeSlots);
@@ -68,5 +70,18 @@ class DtoTest {
 
         assertNotNull(availabilityDto);
         assertEquals(availableVehicleDtoList, availabilityDto.getAvailableVehicleDtoList());
+    }
+
+    @Test
+    void testVehicleDto() {
+        CleanerDto cleanerDto = new CleanerDto(1L, "John", "Doe", 101L);
+        List<CleanerDto> cleaners = List.of(cleanerDto);
+
+        VehicleDto vehicleDto = new VehicleDto(101L, "Van", cleaners);
+
+        assertNotNull(vehicleDto);
+        assertEquals(101L, vehicleDto.getId());
+        assertEquals("Van", vehicleDto.getName());
+        assertEquals(cleaners, vehicleDto.getCleaners());
     }
 }
