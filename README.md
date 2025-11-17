@@ -42,7 +42,7 @@ The **Booking Cleaner API** is a Spring Boot-based application designed to manag
 The OpenAPI documentation is configured in `src/main/java/com/example/justlifetest/configuration/OpenApiConfiguration.java`. You can customize the API title, version, and contact information.
 
 ### Database Configuration
-The application uses an H2 in-memory database for development. You can configure the database in `src/main/resources/application.properties`.
+The application uses an postgresql ORM database running on Docker for development. You can configure the database in `src/main/resources/application.properties`.
 
 ---
 
@@ -52,6 +52,37 @@ The application uses an H2 in-memory database for development. You can configure
 3. **Factory Pattern**: Used to centralize object creations.
 4. **Builder Pattern**: Used to simplify object creation.
 5. **Repository Pattern**: Used to abstract database operations cleanly for entities
+
+---
+
+## Swagger and OpenAPI Documentation
+  The API documentation is automatically generated using OpenAPI/Swagger. You can access it at the following URLs:  
+ - Swagger UI: http://localhost:8080/swagger-ui.html
+ - OpenAPI Specification: http://localhost:8080/v3/api-docs
+
+Ensure the application is running on http://localhost:8080 or adjust the URL based on your configured port.
+
+---
+
+## How to Run the Project
+### Prerequisites:  
+ - Ensure you have Java and Gradle installed.
+ - Set up a database if required by the application.
+ - Build the Project:  
+   Run the following command to build the project:
+    ./gradlew build
+ - Run the Application:  
+   Start the Spring Boot application:
+   ./gradlew bootRun
+   - Access the Endpoints:  
+   The application will be available at http://localhost:8080 (or your configured port).
+   Use tools like curl, Postman, or a browser to interact with the APIs.
+   - Example Endpoint:
+   To invoke the generateVehiclesAndCleaners endpoint:
+   curl -X POST http://localhost:8080/api/booking/generateVehiclesAndCleaners
+   - 
+   
+        This endpoint generates 5 vehicles and assigns 5 cleaners to each vehicle for testing purposes.
 
 ---
 
