@@ -2,8 +2,12 @@ package com.example.justlifetest.api.controller;
 
 import com.example.justlifetest.api.request.BookingRequestDto;
 import com.example.justlifetest.api.request.BookingUpdateRequestDto;
+import com.example.justlifetest.api.response.ResponseOfGet;
+import com.example.justlifetest.api.response.ResponseOfGetList;
 import com.example.justlifetest.dto.AvailabilityDto;
 import com.example.justlifetest.dto.BookingDto;
+import com.example.justlifetest.dto.CleanerDto;
+import com.example.justlifetest.dto.VehicleDto;
 import com.example.justlifetest.service.interfaces.BookingCommandService;
 import com.example.justlifetest.service.interfaces.BookingQueryService;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +35,12 @@ class BookingApiControllerTest {
     void testGetHello() {
         String response = bookingApiController.getHello();
         assertEquals("Hello, JustLife World!", response);
+    }
+
+    @Test
+    void testGenerateVehiclesAndCleaners() {
+        bookingApiController.generateVehiclesAndCleaners();
+        verify(bookingCommandService, times(1)).generateVehiclesAndCleaners();
     }
 
     @Test
@@ -63,7 +73,7 @@ class BookingApiControllerTest {
         AvailabilityDto availabilityDto = new AvailabilityDto();
         when(bookingQueryService.getCleanerAvailabilityWithDate(date)).thenReturn(availabilityDto);
 
-        var response = bookingApiController.getCleanerAvailabilityWithDate(date);
+        ResponseOfGet<AvailabilityDto> response = bookingApiController.getCleanerAvailabilityWithDate(date);
 
         assertEquals(availabilityDto, response.getResult());
         verify(bookingQueryService, times(1)).getCleanerAvailabilityWithDate(date);
@@ -77,20 +87,54 @@ class BookingApiControllerTest {
         AvailabilityDto availabilityDto = new AvailabilityDto();
         when(bookingQueryService.getCleanerAvailabilityWithTimeSlot(date, startTime, endTime)).thenReturn(availabilityDto);
 
-        var response = bookingApiController.getCleanerAvailabilityWithTimeSlot(date, startTime, endTime);
+        ResponseOfGet<AvailabilityDto> response = bookingApiController.getCleanerAvailabilityWithTimeSlot(date, startTime, endTime);
 
         assertEquals(availabilityDto, response.getResult());
         verify(bookingQueryService, times(1)).getCleanerAvailabilityWithTimeSlot(date, startTime, endTime);
     }
+
     @Test
     void testGetBookings() {
         List<String> bookingIdList = List.of("1", "2", "3");
         List<BookingDto> bookingDtoList = List.of(new BookingDto());
         when(bookingQueryService.getBookings(bookingIdList)).thenReturn(bookingDtoList);
 
-        var response = bookingApiController.getBookings(bookingIdList);
+        ResponseOfGetList<BookingDto> response = bookingApiController.getBookings(bookingIdList);
 
         assertEquals(bookingDtoList, response.getList());
         verify(bookingQueryService, times(1)).getBookings(bookingIdList);
+    }
+
+    @Test
+    void testGetAllBookings() {
+        List<BookingDto> bookingDtoList = List.of(new BookingDto());
+        when(bookingQueryService.getAllBookings()).thenReturn(bookingDtoList);
+
+        ResponseOfGetList<BookingDto> response = bookingApiController.getBookings();
+
+        assertEquals(bookingDtoList, response.getList());
+        verify(bookingQueryService, times(1)).getAllBookings();
+    }
+
+    @Test
+    void testGetAllVehicles() {
+        List<VehicleDto> vehicleDtoList = List.of(new VehicleDto());
+        when(bookingQueryService.getAllVehicles()).thenReturn(vehicleDtoList);
+
+        ResponseOfGetList<VehicleDto> response = bookingApiController.getAllVehicles();
+
+        assertEquals(vehicleDtoList, response.getList());
+        verify(bookingQueryService, times(1)).getAllVehicles();
+    }
+
+    @Test
+    void testGetAllCleaners() {
+        List<CleanerDto> cleanerDtoList = List.of(new CleanerDto());
+        when(bookingQueryService.getAllCleaners()).thenReturn(cleanerDtoList);
+
+        ResponseOfGetList<CleanerDto> response = bookingApiController.getAllCleaners();
+
+        assertEquals(cleanerDtoList, response.getList());
+        verify(bookingQueryService, times(1)).getAllCleaners();
     }
 }

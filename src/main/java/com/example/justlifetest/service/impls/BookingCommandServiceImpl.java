@@ -84,7 +84,7 @@ public class BookingCommandServiceImpl implements BookingCommandService {
 
         Booking booking = ObjectFactory.createBooking(
                 timeSlotDto,
-                availableCleaners.subList(0, requestDto.getCleanerCount()+1));
+                availableCleaners.subList(0, requestDto.getCleanerCount()));
         bookingRepository.save(booking);
 
         return modelToDtoAdapter.mapBookingToDto(booking);
