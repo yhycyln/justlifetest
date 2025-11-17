@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class CheckAvailabilityHelper {
@@ -58,7 +59,7 @@ public class CheckAvailabilityHelper {
         // check booking dates between date and start of next day
         Timestamp bookingDate = DateTimeUtil.stringDateToTimestamp(date);
         Timestamp nextBookingDate = DateTimeUtil.addOneDayCalendar(date);
-        List<Booking> bookingList = bookingRepository.findAllByCleanersAndStartDateBetween(cleaner, bookingDate, nextBookingDate);
+        List<Booking> bookingList = bookingRepository.findAllByCleanersAndStartDateBetween(Set.of(cleaner), bookingDate, nextBookingDate);
 
         List<TimeSlotDto> availableTimeSlots = new ArrayList<>();
         if (bookingList.isEmpty()) {

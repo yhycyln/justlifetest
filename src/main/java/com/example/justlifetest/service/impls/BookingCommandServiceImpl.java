@@ -7,6 +7,7 @@ import com.example.justlifetest.dto.CleanerDto;
 import com.example.justlifetest.dto.TimeSlotDto;
 import com.example.justlifetest.factory.ObjectFactory;
 import com.example.justlifetest.helper.CheckAvailabilityHelper;
+import com.example.justlifetest.helper.ModelToDtoAdapter;
 import com.example.justlifetest.helper.ValidationHelper;
 import com.example.justlifetest.model.Booking;
 import com.example.justlifetest.model.Cleaner;
@@ -15,7 +16,6 @@ import com.example.justlifetest.repository.BookingRepository;
 import com.example.justlifetest.repository.CleanerRepository;
 import com.example.justlifetest.repository.VehicleRepository;
 import com.example.justlifetest.service.interfaces.BookingCommandService;
-import com.example.justlifetest.util.MappingHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,19 +31,29 @@ public class BookingCommandServiceImpl implements BookingCommandService {
     private final VehicleRepository vehicleRepository;
     private final CheckAvailabilityHelper checkAvailabilityHelper;
     private final ValidationHelper validationHelper;
+    private final ModelToDtoAdapter modelToDtoAdapter;
 
     public BookingCommandServiceImpl(BookingRepository bookingRepository,
                                      CleanerRepository cleanerRepository,
                                      VehicleRepository vehicleRepository,
                                      CheckAvailabilityHelper checkAvailabilityHelper,
-                                     ValidationHelper validationHelper) {
+                                     ValidationHelper validationHelper,
+                                     ModelToDtoAdapter modelToDtoAdapter) {
         this.bookingRepository = bookingRepository;
         this.cleanerRepository = cleanerRepository;
         this.vehicleRepository = vehicleRepository;
         this.checkAvailabilityHelper = checkAvailabilityHelper;
         this.validationHelper = validationHelper;
+        this.modelToDtoAdapter = modelToDtoAdapter;
     }
 
+    /**
+     * Create booking
+     * if vehicle id not set in the request, find available vehicle for the requested number of cleaners
+     * check availability of cleaners in vehicle for the requested time slot
+     * @param requestDto - BookingRequestDto
+     * @return BookingDto
+     */
     @Override
     public BookingDto createBooking(BookingRequestDto requestDto) {
         TimeSlotDto timeSlotDto = requestDto.getTimeSlotDto();
@@ -51,7 +61,7 @@ public class BookingCommandServiceImpl implements BookingCommandService {
 
         // get available vehicle for the requested number of cleaners
         // consider no vehicle id is provided in the request
-        if (requestDto.getVehicleId() != 0L) {
+        if (requestDto.getVehicleId() == 0L) {
             List<Vehicle> vehicleList = vehicleRepository.findAll();
             for (Vehicle vehicle : vehicleList) {
                 List<Cleaner> cleanerList = cleanerRepository.findAllByVehicleId(vehicle.getId());
@@ -74,12 +84,17 @@ public class BookingCommandServiceImpl implements BookingCommandService {
 
         Booking booking = ObjectFactory.createBooking(
                 timeSlotDto,
-                availableCleaners.subList(0, requestDto.getCleanerCount()));
+                availableCleaners.subList(0, requestDto.getCleanerCount()+1));
         bookingRepository.save(booking);
 
-        return MappingHelper.map(booking, BookingDto.class);
+        return modelToDtoAdapter.mapBookingToDto(booking);
     }
 
+    /**
+     * Update booking
+     * @param requestDto - BookingUpdateRequestDto
+     * @return BookingDto
+     */
     public BookingDto updateBooking(BookingUpdateRequestDto requestDto) {
         TimeSlotDto timeSlotDto = requestDto.getTimeSlotDto();
         validationHelper.validateCleanerCountAndTimeSlot(requestDto.getCleanerList().size(), timeSlotDto);
@@ -98,7 +113,7 @@ public class BookingCommandServiceImpl implements BookingCommandService {
         );
         bookingRepository.save(newBooking);
 
-        return MappingHelper.map(newBooking, BookingDto.class);
+        return modelToDtoAdapter.mapBookingToDto(newBooking);
     }
 
     @Override

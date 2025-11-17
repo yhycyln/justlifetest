@@ -7,6 +7,8 @@ import com.example.justlifetest.util.DateTimeUtil;
 import com.example.justlifetest.util.StringUtil;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
+
 @Component
 public class ValidationHelper {
 
@@ -36,6 +38,10 @@ public class ValidationHelper {
         if (cleanerCount < BusinessConstants.MIN_CLEANER_COUNT
                 || cleanerCount > BusinessConstants.MAX_CLEANER_COUNT) {
             throw new IllegalArgumentException("Invalid cleaner count");
+        }
+        Timestamp startTime = DateTimeUtil.stringToTimestamp(timeSlotDto.getDate().concat(" ").concat(timeSlotDto.getStartTime()).concat(BusinessConstants.DEFAULT_SECONDS_FOR_DATE));
+        if (DateTimeUtil.getCurrentTimestamp().isAfter(startTime.toLocalDateTime())) {
+            throw new IllegalArgumentException("Booking time is in the past");
         }
 
         checkServiceHours(timeSlotDto);

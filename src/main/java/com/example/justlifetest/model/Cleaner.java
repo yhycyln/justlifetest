@@ -24,7 +24,7 @@ public class Cleaner extends BaseEntity {
     @JoinColumn(name="vehicle_id", nullable=false)
     private Vehicle vehicle;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "Cleaner_Booking",
             joinColumns = { @JoinColumn(name = "cleaner_id") },
@@ -39,7 +39,7 @@ public class Cleaner extends BaseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Cleaner cleaner = (Cleaner) o;
-        return Objects.equals(name, cleaner.name) && Objects.equals(surname, cleaner.surname) && Objects.equals(vehicle, cleaner.vehicle) && Objects.equals(bookings, cleaner.bookings);
+        return Objects.equals(name, cleaner.name) && Objects.equals(surname, cleaner.surname) && Objects.equals(vehicle, cleaner.vehicle);
     }
 
     @Override

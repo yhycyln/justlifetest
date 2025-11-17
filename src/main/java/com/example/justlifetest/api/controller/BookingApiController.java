@@ -7,6 +7,8 @@ import com.example.justlifetest.api.response.ResponseOfGet;
 import com.example.justlifetest.api.response.ResponseOfGetList;
 import com.example.justlifetest.dto.AvailabilityDto;
 import com.example.justlifetest.dto.BookingDto;
+import com.example.justlifetest.dto.CleanerDto;
+import com.example.justlifetest.dto.VehicleDto;
 import com.example.justlifetest.service.interfaces.BookingCommandService;
 import com.example.justlifetest.service.interfaces.BookingQueryService;
 import io.swagger.annotations.ApiOperation;
@@ -69,6 +71,24 @@ public class BookingApiController {
     @ApiOperation(value = "Get Booking List API", tags = "Returns booking list", notes = "Returns booking list")
     public ResponseOfGetList<BookingDto> getBookings(@RequestParam List<String> bookingIdList) {
         return new ResponseOfGetList<>(bookingQueryService.getBookings(bookingIdList));
+    }
+
+    @GetMapping(value = "/getAllBookings", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "Get Booking List API", tags = "Returns booking list", notes = "Returns booking list")
+    public ResponseOfGetList<BookingDto> getBookings() {
+        return new ResponseOfGetList<>(bookingQueryService.getAllBookings());
+    }
+
+    @GetMapping(value = "/getAllVehicles", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "Get Vehicle List API", tags = "Returns vehicle list", notes = "Returns vehicle list")
+    public ResponseOfGetList<VehicleDto> getAllVehicles() {
+        return new ResponseOfGetList<>(bookingQueryService.getAllVehicles());
+    }
+
+    @GetMapping(value = "/getAllCleaners", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "Get Cleaner List API", tags = "Returns Cleaner list", notes = "Returns Cleaner list")
+    public ResponseOfGetList<CleanerDto> getAllCleaners() {
+        return new ResponseOfGetList<>(bookingQueryService.getAllCleaners());
     }
 
 }

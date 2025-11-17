@@ -13,18 +13,7 @@ import java.util.Set;
 
 @Repository
 public interface BookingRepository extends RepositoryBase<Booking> {
-    /*
-    @Query("SELECT b FROM Booking AS b " +
-            "WHERE (:cleaner IN b.cleaners) " +
-            "AND (b.startDate BETWEEN :bookingDate AND :nextBookingDate) " +
-            "AND (b.deleted = false) " )
-    List<Booking> getByCleanerAndDateInBetween(
-            @Param("cleaner") Cleaner cleaner,
-            @Param("bookingDate") Timestamp bookingDate,
-            @Param("nextBookingDate") Timestamp nextBookingDate
-    );*/
-
-    List<Booking> findAllByCleanersAndStartDateBetween(Cleaner cleaner, Timestamp bookingDate, Timestamp nextBookingDate);
+    List<Booking> findAllByCleanersAndStartDateBetween(Set<Cleaner> cleaners, Timestamp bookingDate, Timestamp nextBookingDate);
 
     @Query("SELECT b FROM Booking AS b " +
             "WHERE (b.id IN :idList) " +
@@ -32,4 +21,8 @@ public interface BookingRepository extends RepositoryBase<Booking> {
     List<Booking> getBookingsByIdList(@Param("idList") List<String> bookingIdList);
 
     Set<Booking> findAllByCleaners(List<Cleaner> cleaner);
+
+    @Query("SELECT b FROM Booking AS b " +
+            "WHERE (b.deleted = false) " )
+    List<Booking> findAllBookings();
 }

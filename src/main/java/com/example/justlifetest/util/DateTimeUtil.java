@@ -31,6 +31,36 @@ public class DateTimeUtil {
     }
 
     /**
+     * Converts a Timestamp object to a date string in the format "yyyy-MM-dd".
+     * @param timestamp The Timestamp object to be converted.
+     * @return String
+     * @throws IllegalArgumentException if the timestamp is invalid.
+     */
+    public static String timestampToStringDate(Timestamp timestamp) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(DateTimeUtils.FORMAT_STRING_DATE);
+            return dateFormat.format(timestamp);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid timestamp format.", e);
+        }
+    }
+
+    /**
+     * Converts a Timestamp object to a time string in the format "HH:mm:ss".
+     * @param timestamp The Timestamp object to be converted.
+     * @return String
+     * @throws IllegalArgumentException if the timestamp is invalid.
+     */
+    public static String timestampToStringDateHour(Timestamp timestamp) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(DateTimeUtils.FORMAT_STRING_TIME);
+            return dateFormat.format(timestamp);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid timestamp format.", e);
+        }
+    }
+
+    /**
      * Checks if a given date string (yyyy-MM-dd format) is not a Friday.
      *
      * @param dateStr The date string in yyyy-MM-dd format.

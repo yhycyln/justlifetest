@@ -3,14 +3,15 @@ package com.example.justlifetest.service.impls;
 import com.example.justlifetest.dto.*;
 import com.example.justlifetest.factory.ObjectFactory;
 import com.example.justlifetest.helper.CheckAvailabilityHelper;
+import com.example.justlifetest.helper.ModelToDtoAdapter;
 import com.example.justlifetest.helper.ValidationHelper;
 import com.example.justlifetest.model.Booking;
 import com.example.justlifetest.model.Cleaner;
 import com.example.justlifetest.model.Vehicle;
 import com.example.justlifetest.repository.BookingRepository;
 import com.example.justlifetest.repository.CleanerRepository;
+import com.example.justlifetest.repository.VehicleRepository;
 import com.example.justlifetest.service.interfaces.BookingQueryService;
-import com.example.justlifetest.util.MappingHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,17 +26,23 @@ public class BookingQueryServiceImpl implements BookingQueryService {
 
     private final BookingRepository bookingRepository;
     private final CleanerRepository cleanerRepository;
+    private final VehicleRepository vehicleRepository;
     private final CheckAvailabilityHelper checkAvailabilityHelper;
     private final ValidationHelper validationHelper;
+    private final ModelToDtoAdapter modelToDtoAdapter;
 
     public BookingQueryServiceImpl(BookingRepository bookingRepository,
                                    CleanerRepository cleanerRepository,
+                                   VehicleRepository vehicleRepository,
                                    CheckAvailabilityHelper checkAvailabilityHelper,
-                                   ValidationHelper validationHelper) {
+                                   ValidationHelper validationHelper,
+                                   ModelToDtoAdapter modelToDtoAdapter) {
         this.bookingRepository = bookingRepository;
         this.cleanerRepository = cleanerRepository;
+        this.vehicleRepository = vehicleRepository;
         this.checkAvailabilityHelper = checkAvailabilityHelper;
         this.validationHelper = validationHelper;
+        this.modelToDtoAdapter = modelToDtoAdapter;
     }
 
     /**
@@ -60,7 +67,7 @@ public class BookingQueryServiceImpl implements BookingQueryService {
                             entry.getKey().getId(),
                             entry.getValue().stream().collect(
                                     Collectors.toMap(
-                                            cleaner -> MappingHelper.map(cleaner, CleanerDto.class),
+                                            modelToDtoAdapter::mapCleanerToDto,
                                             cleaner -> checkAvailabilityHelper.getAvailableHoursOfCleaner(cleaner, date)
                                     )
                             )
@@ -99,7 +106,7 @@ public class BookingQueryServiceImpl implements BookingQueryService {
                             entry.getKey().getId(),
                             entry.getValue().stream().collect(
                                     Collectors.toMap(
-                                            cleaner -> MappingHelper.map(cleaner, CleanerDto.class),
+                                            modelToDtoAdapter::mapCleanerToDto,
                                             cleaner -> availableTimeSlots
                                     )
                             )
@@ -118,7 +125,43 @@ public class BookingQueryServiceImpl implements BookingQueryService {
     public List<BookingDto> getBookings(List<String> bookingIdList) {
         List<Booking> bookingList = bookingRepository.getBookingsByIdList(bookingIdList);
         return bookingList.stream()
-                .map(booking -> MappingHelper.map(booking, BookingDto.class))
+                .map(modelToDtoAdapter::mapBookingToDto)
+                .toList();
+    }
+
+    /**
+     * Get all bookings
+     * @return list of BookingDto
+     */
+    @Override
+    public List<BookingDto> getAllBookings() {
+        List<Booking> bookingList = bookingRepository.findAllBookings();
+        return bookingList.stream()
+                .map(modelToDtoAdapter::mapBookingToDto)
+                .toList();
+    }
+
+    /**
+     * Get all vehicles
+     * @return list of VehicleDto
+     */
+    @Override
+    public List<VehicleDto> getAllVehicles() {
+        List<Vehicle> vehicleList = vehicleRepository.findAllVehicles();
+        return vehicleList.stream()
+                .map(modelToDtoAdapter::mapVehicleToDto)
+                .toList();
+    }
+
+    /**
+     * Get all cleaners
+     * @return list of CleanerDto
+     */
+    @Override
+    public List<CleanerDto> getAllCleaners() {
+        List<Cleaner> cleanerList = cleanerRepository.findAllCleaner();
+        return cleanerList.stream()
+                .map(modelToDtoAdapter::mapCleanerToDto)
                 .toList();
     }
 
