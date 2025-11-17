@@ -9,4 +9,6 @@ public interface BookingCommandService {
     BookingDto createBooking(BookingRequestDto requestDto);
 
     BookingDto updateBooking(BookingUpdateRequestDto requestDto);
+
+    void generateVehiclesAndCleaners();
 }

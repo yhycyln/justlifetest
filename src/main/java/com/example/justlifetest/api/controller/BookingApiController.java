@@ -33,6 +33,12 @@ public class BookingApiController {
         return "Hello, JustLife World!";
     }
 
+    @PostMapping(value = "/generateVehiclesAndCleaners", consumes = MediaType.ALL_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+    @ApiOperation(value = "generateVehiclesAndCleaners api", tags = "Generates 5 vehicles and 5 cleaners to each vehicle for test", notes = "Generates 5 vehicles and 5 cleaners to each vehicle for test")
+    public void generateVehiclesAndCleaners() {
+        bookingCommandService.generateVehiclesAndCleaners();
+    }
+
     @PostMapping(value = "/createBooking", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Create Booking API", tags = "Returns created booking info", notes = "Returns created booking info")
     public BookingDto createBooking(@RequestBody BookingRequestDto requestDto) {

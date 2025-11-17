@@ -64,7 +64,9 @@ public class CheckAvailabilityHelper {
         if (bookingList.isEmpty()) {
             // return all day
             TimeSlotDto timeSlotDto = ObjectFactory
-                    .createTimeSlotDto(date, String.format("%02d", BusinessConstants.SERVICE_START_HOUR), String.valueOf(BusinessConstants.SERVICE_END_HOUR));
+                    .createTimeSlotDto(date,
+                            String.format("%02d", BusinessConstants.SERVICE_START_HOUR).concat(BusinessConstants.DEFAULT_MINUTES_FOR_DATE_FORMAT),
+                            String.valueOf(BusinessConstants.SERVICE_END_HOUR).concat(BusinessConstants.DEFAULT_MINUTES_FOR_DATE_FORMAT));
             availableTimeSlots.add(timeSlotDto);
         } else {
             // add time slots based on existing bookings plus 30 minutes and at least 2 hour long
@@ -75,7 +77,9 @@ public class CheckAvailabilityHelper {
                 int bookingStartHour = booking.getStartDate().toLocalDateTime().getHour();
                 if (bookingStartHour - serviceStartHour > 2) {
                     TimeSlotDto timeSlotDto = ObjectFactory
-                            .createTimeSlotDto(date, String.format("%02d", serviceStartHour), String.format("%02d", bookingStartHour));
+                            .createTimeSlotDto(date,
+                                    String.format("%02d", serviceStartHour).concat(BusinessConstants.DEFAULT_MINUTES_FOR_DATE_FORMAT),
+                                    String.format("%02d", bookingStartHour).concat(BusinessConstants.DEFAULT_MINUTES_FOR_DATE_FORMAT));
                     availableTimeSlots.add(timeSlotDto);
                 }
                 serviceStartHour = booking.getEndDate().toLocalDateTime().getHour() + 1; // adding break time

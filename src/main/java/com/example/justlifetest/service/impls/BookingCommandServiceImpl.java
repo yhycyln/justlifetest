@@ -101,4 +101,17 @@ public class BookingCommandServiceImpl implements BookingCommandService {
         return MappingHelper.map(newBooking, BookingDto.class);
     }
 
+    @Override
+    public void generateVehiclesAndCleaners() {
+        for (int i = 1; i <= 5; i++) {
+            Vehicle vehicle = ObjectFactory.createVehicle(i);
+            vehicleRepository.save(vehicle);
+
+            for (int j = 1; j <= 5; j++) {
+                Cleaner cleaner = ObjectFactory.createCleaner((i - 1) * 5 + j, vehicle);
+                cleanerRepository.save(cleaner);
+            }
+        }
+    }
+
 }

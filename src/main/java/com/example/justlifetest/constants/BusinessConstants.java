@@ -5,7 +5,8 @@ import java.util.List;
 
 public class BusinessConstants {
 
-    public static final String SECONDS_FOR_DATE = ":00";
+    public static final String DEFAULT_SECONDS_FOR_DATE = ":00";
+    public static final String DEFAULT_MINUTES_FOR_DATE_FORMAT = DEFAULT_SECONDS_FOR_DATE.concat(DEFAULT_SECONDS_FOR_DATE);
     public static final int BREAK_TIME_IN_MINUTES = 30;
     public static final int BREAK_TIME_IN_MILLISECONDS = BREAK_TIME_IN_MINUTES * 60 * 1000;
     public static final int MIN_CLEANER_COUNT = 1;
