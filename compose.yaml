@@ -13,7 +13,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgrespw
     ports:
-      - 32769:5432
+      - 5432:5432
     volumes:
       - data:/var/lib/postgresql
     networks:

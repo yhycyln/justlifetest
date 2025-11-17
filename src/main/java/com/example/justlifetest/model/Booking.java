@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Where;
 
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -15,7 +14,6 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Where(clause = BaseEntity.SOFT_DELETE_CLAUSE)
 public class Booking extends BaseEntity {
 
     @Nonnull
@@ -37,6 +35,6 @@ public class Booking extends BaseEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), startDate, endDate, cleaners);
+        return Objects.hash(super.hashCode(), startDate, endDate);
     }
 }

@@ -5,7 +5,6 @@ import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Where;
 
 import java.util.Objects;
 import java.util.Set;
@@ -13,7 +12,6 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Where(clause = BaseEntity.SOFT_DELETE_CLAUSE)
 public class Vehicle extends BaseEntity {
 
     @Nonnull
@@ -40,6 +38,6 @@ public class Vehicle extends BaseEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, cleaners, bookings);
+        return Objects.hash(super.hashCode());
     }
 }
