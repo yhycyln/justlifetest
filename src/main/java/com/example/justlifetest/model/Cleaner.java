@@ -27,8 +27,8 @@ public class Cleaner extends BaseEntity {
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "Cleaner_Booking",
-            joinColumns = { @JoinColumn(name = "cleaner_id") },
-            inverseJoinColumns = { @JoinColumn(name = "booking_id") }
+            joinColumns = { @JoinColumn(name = "cleaner_id", referencedColumnName = "id") },
+            inverseJoinColumns = { @JoinColumn(name = "booking_id", referencedColumnName = "id") }
     )
     private Set<Booking> bookings;
 
