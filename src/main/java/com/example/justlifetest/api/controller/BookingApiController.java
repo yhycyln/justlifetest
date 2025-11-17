@@ -53,15 +53,15 @@ public class BookingApiController {
 
     @GetMapping(value = "/availabilityWithDate", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Get Cleaner Availability API", tags = "Returns availability of cleaners", notes = "Returns availability of cleaners")
-    public ResponseOfGet<AvailabilityDto> getCleanerAvailabilityWithDate(@RequestParam String date) {
+    public ResponseOfGet<AvailabilityDto> getCleanerAvailabilityWithDate(@RequestParam(defaultValue = "yyyy-MM-dd") String date) {
         return new ResponseOfGet<>(bookingQueryService.getCleanerAvailabilityWithDate(date));
     }
 
     @GetMapping(value = "/availabilityWithTimeSlot", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Get Cleaner Availability API", tags = "Returns availability of cleaners", notes = "Returns availability of cleaners")
-    public ResponseOfGet<AvailabilityDto> getCleanerAvailabilityWithTimeSlot(@RequestParam String date,
-                                                                @RequestParam String startTime,
-                                                                @RequestParam String endTime) {
+    public ResponseOfGet<AvailabilityDto> getCleanerAvailabilityWithTimeSlot(@RequestParam(defaultValue = "yyyy-MM-dd") String date,
+                                                                @RequestParam(defaultValue = "HH:mm") String startTime,
+                                                                @RequestParam(defaultValue = "HH:mm") String endTime) {
         return new ResponseOfGet<>(bookingQueryService.getCleanerAvailabilityWithTimeSlot(date, startTime, endTime));
     }
 
