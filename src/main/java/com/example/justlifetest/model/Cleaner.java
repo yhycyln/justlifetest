@@ -20,7 +20,7 @@ public class Cleaner extends BaseEntity {
     @Nonnull
     private String surname;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="vehicle_id", nullable=false)
     private Vehicle vehicle;
 
