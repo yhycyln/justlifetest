@@ -25,7 +25,20 @@ public class Booking extends BaseEntity {
     private Timestamp endDate;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "bookings")
-    private Set<Cleaner> cleaners = new HashSet<>();
+    private Set<Cleaner> cleaners;
+
+    public void addCleaner(Cleaner cleaner) {
+        if (this.cleaners == null) {
+            this.cleaners = new HashSet<>();
+        }
+        this.cleaners.add(cleaner);
+    }
+
+    public void removeCleaner(Cleaner cleaner) {
+        if (this.cleaners != null) {
+            this.cleaners.remove(cleaner);
+        }
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -32,6 +32,20 @@ public class Cleaner extends BaseEntity {
     )
     private Set<Booking> bookings;
 
+    public void addBooking(Booking booking) {
+        if (this.bookings == null) {
+            this.bookings = new java.util.HashSet<>();
+        }
+        this.bookings.add(booking);
+        booking.addCleaner(this);
+    }
+
+    public void removeBooking(Booking booking) {
+        if (this.bookings != null) {
+            this.bookings.remove(booking);
+            booking.removeCleaner(this);
+        }
+    }
 
     @Override
     public boolean equals(Object o) {
